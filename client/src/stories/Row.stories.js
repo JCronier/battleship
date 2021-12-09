@@ -6,3 +6,4 @@ import Row from '../Components/Row';
 
 storiesOf("Row", module)
   .add("Base", () => <Row />)
+  .add("Clickable Tiles", () => <Row onClick={(id) => console.log(id)} />);
