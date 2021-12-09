@@ -1,11 +1,12 @@
-$action-size: 80px;
+$action-size: 25px;
+$tile-size: 40px;
 
 .tile {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  height: 100px;
+  width: $tile-size;
+  height: $tile-size;
   background-color: beige;
   border: solid 1px;
 }
