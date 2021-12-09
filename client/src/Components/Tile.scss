@@ -1,0 +1,27 @@
+$action-size: 80px;
+
+.tile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  background-color: beige;
+  border: solid 1px;
+}
+
+.hit {
+  width: $action-size;
+  height: $action-size;
+  background-color: red;
+  border: solid 1px;
+  border-radius: 50%;
+}
+
+.miss {
+  width: $action-size;
+  height: $action-size;
+  background-color: white;
+  border: solid 1px;
+  border-radius: 50%;
+}
