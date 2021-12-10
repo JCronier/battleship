@@ -12,17 +12,13 @@ $tile-size: 40px;
 }
 
 .hit {
-  width: $action-size;
-  height: $action-size;
   background-color: red;
-  border: solid 1px;
-  border-radius: 50%;
 }
 
 .miss {
-  width: $action-size;
-  height: $action-size;
   background-color: white;
-  border: solid 1px;
-  border-radius: 50%;
+}
+
+.ship {
+  background-color: gray;
 }

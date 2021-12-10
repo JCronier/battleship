@@ -10,8 +10,8 @@ import './Board.scss';
 export default function Board ({ onClick }) {
   const boardClass = classNames('board');
 
-  const board = 'ABCDEFGHIJ'.split('').map((rowId, index) => {
-    return <Row key={index} rowId={rowId} onClick={onClick}/>
+  const board = 'ABCDEFGHIJ'.split('').map(rowId => {
+    return <Row key={rowId} rowId={rowId} onClick={onClick}/>
   });
 
   return (

@@ -6,6 +6,7 @@ import Tile from '../Components/Tile';
 
 storiesOf("Tile", module)
   .add("Base", () => <Tile />)
-  .add("Hit", () => <Tile hit={"hit"} />)
-  .add("Miss", () => <Tile miss={"miss"}/>)
+  .add("Hit", () => <Tile status={"hit"} />)
+  .add("Miss", () => <Tile status={"miss"}/>)
+  .add("Ship", () => <Tile status={"ship"} />)
   .add("Clickable", () => <Tile onClick={(id) => console.log(id)} />);
