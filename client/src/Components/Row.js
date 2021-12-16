@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 // Components
@@ -7,55 +7,18 @@ import Tile from './Tile';
 // Stylesheets
 import './Row.scss';
 
-export default function Row ({ rowId }) {
+export default function Row ({ rowId, onClick, onEnter, onLeave, board }) {
   const rowClass = classNames('row');
-  const [tiles, setTiles] = useState(Array(10).fill({
-    class: "",
-    isClicked: false
-  }));
-
-  const onEnter = (index) => {
-    if (!tiles[index].isClicked) {
-      setTiles(prev => [...prev].map((tile, ind) => {
-        if (index === ind) {
-          return {...tile, class:"ship"};
-        }
-        return tile;
-      }));
-    };
-  };
-
-  const onLeave = (index) => {
-    if (!tiles[index].isClicked) {
-      setTiles(prev => [...prev].map((tile, ind) => {
-        if (index === ind) {
-          return {...tile, class: ""};
-        }
-        return tile;
-      }));
-    };
-  };
-
-  const onClick = (index) => {
-    for (let i = 0; i < 5; i++) {
-      setTiles(prev => [...prev].map((tile, ind) => {
-        if (index + i === ind) {
-          return {...tile, class: "ship", isClicked: true};
-        }
-        return tile;
-      }));
-    }
-  };
 
   const row = [...Array(10).keys()].map(id => {
     return <Tile
               key={id}
-              id={rowId.concat(id + 1)}
-              status={tiles[id]}
+              id={rowId * 10 + id}
+              status={board[rowId * 10 + id]}
               value={id}
-              onClick={() => onClick(id)}
-              onMouseEnter={() => onEnter(id)}
-              onMouseLeave={() => onLeave(id)}
+              onClick={() => onClick(rowId * 10 + id)}
+              onMouseEnter={() => onEnter(rowId * 10 + id)}
+              onMouseLeave={() => onLeave(rowId * 10 + id)}
               />
   });
 
@@ -65,3 +28,57 @@ export default function Row ({ rowId }) {
     </div>
   );
 };
+
+// const onEnter = (index) => {
+//   for (let i = 0; i < 5; i++) {
+//     if (index + 4 < 10 && !tiles[index + i].isClicked) {
+//       setTiles(prev => [...prev].map((tile, ind) => {
+//         if (index + i === ind) {
+//           return {...tile, class: "ship"};
+//         }
+//         return tile;
+//       }));
+//     } else {
+//       setTiles(prev => [...prev].map((tile, ind) => {
+//         if (index + i === ind) {
+//           return {...tile, class: "hit"};
+//         }
+//         return tile;
+//       }));
+//     };
+//   };
+// };
+
+// const onLeave = (index) => {
+//   for (let i = 0; i < 5; i++) {
+//     if (index + i < 10 && !tiles[index + i].isClicked) {
+//       setTiles(prev => [...prev].map((tile, ind) => {
+//         if (index + i === ind) {
+//           return {...tile, class: ""};
+//         }
+//         return tile;
+//       }));
+//     }
+
+//     if (index + i < 10 && tiles[index + i].isClicked) {
+//       setTiles(prev => [...prev].map((tile, ind) => {
+//         if (index + i === ind) {
+//           return {...tile, class: "ship"};
+//         }
+//         return tile;
+//       }));
+//     }
+//   };
+// };
+
+// const onClick = (index, tileId) => {
+//   console.log(tileId);
+//   for (let i = 0; i < 5; i++) {
+//     setTiles(prev => [...prev].map((tile, ind) => {
+//       if (index + i === ind) {
+//         return {...tile, class: "ship", isClicked: true};
+//       }
+//       return tile;
+//     }));
+//   }
+// };
