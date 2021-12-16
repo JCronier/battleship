@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 // Components
 import Row from './Row';
+import PlayerFleet from './PlayerFleet';
 
 // Stylesheets
 import './Board.scss';
@@ -16,9 +17,10 @@ export default function Board() {
   }));
 
   const [multiplier, setMultiplier] = useState(1);
-  const [currentShip, setCurrentShip] = useState(5);
-
   const [invalidPlacement, setInvalidPlacement] = useState(false);
+
+
+  const [currentShip, setCurrentShip] = useState(5);
 
   const toggleAlignment = () => {
     setTiles(prev => {
@@ -36,6 +38,29 @@ export default function Board() {
   };
 
   useKeypress('r', () => toggleAlignment());
+
+   const ships = {
+    "carrier": {
+      tiles: 5,
+      isPlaced: false
+    },
+    "battleship": {
+      tiles: 4,
+      isPlaced: false
+    },
+    "cruiser": {
+      tiles: 3,
+      isPlaced: false
+    },
+    "submarine": {
+      tiles: 3,
+      isPlaced: false
+    },
+    "destroyer": {
+      tiles: 2,
+      isPlaced: false
+    }
+  };
 
 
   // const onEnter = (index) => {
@@ -127,14 +152,20 @@ export default function Board() {
 
   const onClick = (index) => {
     for (let i = 0; i < currentShip; i++) {
-      setTiles(prev => [...prev].map((tile, ind) => {
-        if (index + i * multiplier === ind && !invalidPlacement) {
-          return { ...tile, class: "ship", isClicked: true };
-        }
-        return tile;
-      }));
+      setTiles(prev => {
+        return [...prev].map((tile, ind) => {
+          if (index + i * multiplier === ind && !invalidPlacement) {
+            return { ...tile, class: "ship", isClicked: true };
+          }
+          return tile;
+        });
+      });
     }
   };
+
+  const selectShip = (ship) => {
+    setCurrentShip(ships[ship].tiles);
+  }
 
   const board = [...Array(10).keys()].map(rowId => {
     return (
@@ -150,11 +181,13 @@ export default function Board() {
   });
 
   return (
-
+    <>
+    <PlayerFleet onClick={selectShip} />
     <div className={boardClass}>
       {invalidPlacement && <p>Invalid Placement</p>}
       {!invalidPlacement && <p>Valid Placement</p>}
       {board}
     </div>
+    </>
   );
 };
