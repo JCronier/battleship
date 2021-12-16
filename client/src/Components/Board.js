@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useKeypress from 'react-use-keypress';
 import classNames from 'classnames';
 
 // Components
@@ -14,10 +15,28 @@ export default function Board() {
     isClicked: false
   }));
 
+  const [multiplier, setMultiplier] = useState(1);
+  const [currentShip, setCurrentShip] = useState(5);
+
   const [invalidPlacement, setInvalidPlacement] = useState(false);
 
-  const multiplier = 1;
-  const ship = 5;
+  const toggleAlignment = () => {
+    setTiles(prev => {
+      return [...prev].map(tile => {
+        if(tile.isClicked) {
+          return tile;
+        }
+        return {
+          ...tile,
+          class: ""
+        };
+      });
+    });
+    multiplier < 10 ? setMultiplier(10) : setMultiplier(1);
+  };
+
+  useKeypress('r', () => toggleAlignment());
+
 
   // const onEnter = (index) => {
   //   const rowIndex = index % 10;
@@ -63,25 +82,15 @@ export default function Board() {
   //   };
   // };
 
-  // const onClick = (index, tileId) => {
-  //   console.log(tileId);
-  //   for (let i = 0; i < 5; i++) {
-  //     setTiles(prev => [...prev].map((tile, ind) => {
-  //       if (index + i === ind) {
-  //         return {...tile, class: "ship", isClicked: true};
-  //       }
-  //       return tile;
-  //     }));
-  //   }
-  // };
-
   const onEnter = (index) => {
     setInvalidPlacement(false);
-    const rowIndex = index % 10;
-    for (let i = 0 * multiplier; i < ship * multiplier; i += multiplier) {
-      if (rowIndex + ship <= 10 && !tiles[index + i].isClicked) {
+    const verticalOffset = multiplier < 10? 0 : index % 10;
+    const rowIndex = multiplier < 10 ? index % 10: index;
+
+    for (let i = 0; i < currentShip; i++) {
+      if (rowIndex + currentShip * multiplier <= 10 * multiplier + verticalOffset  && !tiles[index + i * multiplier].isClicked) {
         setTiles(prev => [...prev].map((tile, ind) => {
-          if (index + i === ind) {
+          if (index + i * multiplier === ind) {
             return { ...tile, class: "ship" };
           }
           return tile;
@@ -93,18 +102,19 @@ export default function Board() {
   };
 
   const onLeave = (index) => {
-    const rowIndex = index % 10;
-    for (let i = 0 * multiplier; i < ship * multiplier; i += multiplier) {
-      if (rowIndex + ship <= 10 && !tiles[index + i].isClicked) {
+    const verticalOffset = multiplier < 10? 0 : index % 10;
+    const rowIndex = multiplier < 10 ? index % 10: index;
+    for (let i = 0; i < currentShip; i++) {
+      if (rowIndex + currentShip * multiplier <= 10 * multiplier + verticalOffset && !tiles[index + i * multiplier].isClicked) {
         setTiles(prev => [...prev].map((tile, ind) => {
-          if (index + i === ind && ind < Math.floor(index / 10) * 10 + 10) {
+          if (index + i * multiplier === ind && ind < (Math.floor(index / 10) * 10 + 10) * multiplier) {
             return { ...tile, class: "" };
           }
           return tile;
         }));
       }
 
-      if (rowIndex + i < 10 && tiles[index + i].isClicked) {
+      if (rowIndex + currentShip * multiplier <= 10 * multiplier + verticalOffset && tiles[index + i].isClicked) {
         setTiles(prev => [...prev].map((tile, ind) => {
           if (index + i === ind && ind < Math.floor(index / 10) * 10 + 10) {
             return { ...tile, class: "ship" };
@@ -115,11 +125,10 @@ export default function Board() {
     };
   };
 
-  const onClick = (index, tileId) => {
-    console.log(tileId);
-    for (let i = 0; i < 5; i++) {
+  const onClick = (index) => {
+    for (let i = 0; i < currentShip; i++) {
       setTiles(prev => [...prev].map((tile, ind) => {
-        if (index + i === ind && !invalidPlacement) {
+        if (index + i * multiplier === ind && !invalidPlacement) {
           return { ...tile, class: "ship", isClicked: true };
         }
         return tile;
